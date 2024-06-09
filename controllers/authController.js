@@ -112,7 +112,6 @@ exports.updatePassword = async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Encriptar la nueva contraseña antes de guardarla
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt);
         

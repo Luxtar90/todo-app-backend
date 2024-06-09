@@ -23,7 +23,7 @@ exports.createTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
     try {
-        const taskId = req.params.id.trim(); // Eliminar cualquier espacio o salto de línea
+        const taskId = req.params.id.trim(); 
         const task = await Task.findByIdAndUpdate(taskId, req.body, { new: true });
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
@@ -37,7 +37,7 @@ exports.updateTask = async (req, res) => {
 
 exports.deleteTask = async (req, res) => {
     try {
-        const taskId = req.params.id.trim(); // Eliminar cualquier espacio o salto de línea
+        const taskId = req.params.id.trim();
         const task = await Task.findByIdAndDelete(taskId);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
