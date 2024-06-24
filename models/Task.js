@@ -1,10 +1,11 @@
+// models/Task.js
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
     },
     title: {
         type: String,
@@ -14,14 +15,20 @@ const TaskSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    start: {
+        type: Date,
+        required: false,
+    },
+    end: {
+        type: Date,
+        required: false,
+    },
     completed: {
         type: Boolean,
         default: false,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
+}, {
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Task', TaskSchema);
