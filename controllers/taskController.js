@@ -10,11 +10,19 @@ exports.getTasks = async (req, res) => {
     }
 };
 
+// controllers/tasksController.js
+
 exports.createTask = async (req, res) => {
     try {
+        const { title, description, start, end } = req.body;
+        console.log('Datos recibidos en el backend:', { title, description, start, end }); // Agrega esto
+
         const newTask = new Task({
             user: req.user.id,
-            ...req.body
+            title,
+            description,
+            start: new Date(start),
+            end: new Date(end),
         });
         const task = await newTask.save();
         res.json(task);
@@ -26,11 +34,22 @@ exports.createTask = async (req, res) => {
 
 exports.updateTask = async (req, res) => {
     try {
-        const taskId = req.params.id.trim(); 
-        const task = await Task.findByIdAndUpdate(taskId, req.body, { new: true });
+        const taskId = req.params.id.trim();
+        const { title, description, start, end } = req.body;
+
+        const task = await Task.findById(taskId);
+
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
+
+        task.title = title;
+        task.description = description;
+        task.start = new Date(start);
+        task.end = new Date(end);
+
+        await task.save();
+
         res.json(task);
     } catch (error) {
         console.error("Error al actualizar tarea:", error);
@@ -72,14 +91,22 @@ exports.updateTaskStatus = async (req, res) => {
     }
 };
 
-const User = require('../models/User'); // Asegúrate de importar tu modelo de usuario
-
-exports.getProfile = async (req, res) => {
+exports.toggleTaskCompletion = async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).select('-password'); // Excluye la contraseña
-        res.json({ user });
+        const taskId = req.params.id;
+        const task = await Task.findById(taskId);
+
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        task.completed = !task.completed;
+        await task.save();
+
+        res.status(200).json({ message: 'Task status updated', task });
     } catch (error) {
-        console.error('Error fetching profile:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+  
