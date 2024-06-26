@@ -71,10 +71,10 @@ exports.resetPasswordRequest = async (req, res) => {
             to: user.email,
             from: process.env.EMAIL_USER,
             subject: 'Password Reset',
-            text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
-                  `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
+            text: `Has recibido este mensaje porque tú (u otra persona) ha solicitado restablecer la contraseña de tu cuenta.\n\n` +
+                  `Por favor, haz clic en el siguiente enlace, o pégalo en tu navegador para completar el proceso:\n\n` +
                   `${process.env.FRONTEND_URL}/reset/${token}\n\n` +
-                  `If you did not request this, please ignore this email and your password will remain unchanged.\n`
+                  `Si no solicitaste esto, por favor ignora este correo y tu contraseña permanecerá sin cambios.\n`
         };
 
         transporter.sendMail(mailOptions, (err, response) => {
