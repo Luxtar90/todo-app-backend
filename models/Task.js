@@ -1,4 +1,3 @@
-// models/Task.js
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
@@ -8,7 +7,7 @@ const TaskSchema = new mongoose.Schema({
         required: true,
     },
     title: {
-        type: String,
+        type: String, 
         required: true,
     },
     description: {

@@ -10,13 +10,9 @@ exports.getTasks = async (req, res) => {
     }
 };
 
-// controllers/tasksController.js
-
 exports.createTask = async (req, res) => {
     try {
         const { title, description, start, end } = req.body;
-        console.log('Datos recibidos en el backend:', { title, description, start, end }); // Agrega esto
-
         const newTask = new Task({
             user: req.user.id,
             title,
@@ -36,20 +32,15 @@ exports.updateTask = async (req, res) => {
     try {
         const taskId = req.params.id.trim();
         const { title, description, start, end } = req.body;
-
         const task = await Task.findById(taskId);
-
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
-
         task.title = title;
         task.description = description;
         task.start = new Date(start);
         task.end = new Date(end);
-
         await task.save();
-
         res.json(task);
     } catch (error) {
         console.error("Error al actualizar tarea:", error);
@@ -74,16 +65,13 @@ exports.deleteTask = async (req, res) => {
 exports.updateTaskStatus = async (req, res) => {
     const { id } = req.params;
     const { completed } = req.body;
-
     try {
         const task = await Task.findById(id);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
-
         task.completed = completed;
         await task.save();
-
         res.status(200).json(task);
     } catch (error) {
         console.error('Error updating task status:', error);
@@ -95,18 +83,13 @@ exports.toggleTaskCompletion = async (req, res) => {
     try {
         const taskId = req.params.id;
         const task = await Task.findById(taskId);
-
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
-
         task.completed = !task.completed;
         await task.save();
-
         res.status(200).json({ message: 'Task status updated', task });
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
-  
