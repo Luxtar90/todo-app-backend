@@ -5,7 +5,7 @@ const User = require('../models/User');
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5000/auth/google/callback',  // Asegúrate de que esta URL esté completa y correcta
+  callbackURL: 'https://todo-app-backend-xi-pearl.vercel.app/auth/google/callback',  // Asegúrate de que esta URL esté completa y correcta
 },
 async (token, tokenSecret, profile, done) => {
   try {

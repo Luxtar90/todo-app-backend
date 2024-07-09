@@ -28,7 +28,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
     try {
       const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       console.log('Generated JWT:', token);  // Log del token generado
-      res.redirect(`http://localhost:3000/auth/callback?token=${token}`);
+      res.redirect(`https://todo-app-backend-xi-pearl.vercel.app/auth/google/callback?token=${token}`);
     } catch (error) {
       console.error('Error generating JWT:', error);
       res.redirect('/login');
