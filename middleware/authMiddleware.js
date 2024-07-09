@@ -12,9 +12,12 @@ const authMiddleware = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('Decoded JWT:', decoded);
         req.user = await User.findById(decoded.id);
+        console.log('Authenticated user:', req.user);
         next();
     } catch (error) {
+        console.error('Token verification error:', error);
         res.status(401).json({ message: 'Token is not valid' });
     }
 };
