@@ -26,6 +26,10 @@ const TaskSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    color: {
+        type: String,
+        default: '#1abc9c', // Añadir campo de color con un valor por defecto
+    }
 }, {
     timestamps: true,
 });

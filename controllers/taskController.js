@@ -12,13 +12,14 @@ exports.getTasks = async (req, res) => {
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, start, end } = req.body;
+        const { title, description, start, end, color } = req.body; // Añadir color aquí
         const newTask = new Task({
             user: req.user.id,
             title,
             description,
             start: new Date(start),
             end: new Date(end),
+            color // Añadir color aquí
         });
         const task = await newTask.save();
         res.json(task);
@@ -31,7 +32,7 @@ exports.createTask = async (req, res) => {
 exports.updateTask = async (req, res) => {
     try {
         const taskId = req.params.id.trim();
-        const { title, description, start, end } = req.body;
+        const { title, description, start, end, color } = req.body; // Añadir color aquí
         const task = await Task.findById(taskId);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
@@ -40,6 +41,7 @@ exports.updateTask = async (req, res) => {
         task.description = description;
         task.start = new Date(start);
         task.end = new Date(end);
+        task.color = color; // Añadir color aquí
         await task.save();
         res.json(task);
     } catch (error) {
