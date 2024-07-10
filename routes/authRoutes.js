@@ -27,7 +27,20 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
   async (req, res) => {
     try {
       const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      console.log('Generated JWT:', token);  // Log del token generado
+      res.redirect(`http://localhost:3000/auth/callback?token=${token}`);
+    } catch (error) {
+      console.error('Error generating JWT:', error);
+      res.redirect('/login');
+    }
+  }
+);
+
+// Facebook Auth Routes
+router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }),
+  async (req, res) => {
+    try {
+      const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       res.redirect(`http://localhost:3000/auth/callback?token=${token}`);
     } catch (error) {
       console.error('Error generating JWT:', error);
