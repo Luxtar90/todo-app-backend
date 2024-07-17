@@ -7,7 +7,7 @@ const User = require('../models/User');
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5000/auth/google/callback',
+  callbackURL: 'https://todo-app-backend-xi-pearl.vercel.app/auth/google/callback',
 },
 async (token, tokenSecret, profile, done) => {
   try {
@@ -37,7 +37,7 @@ async (token, tokenSecret, profile, done) => {
 passport.use(new FacebookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: 'http://localhost:5000/auth/facebook/callback',
+  callbackURL: 'https://todo-app-backend-xi-pearl.vercel.app/auth/facebook/callback',
   profileFields: ['id', 'emails', 'name']
 },
 async (accessToken, refreshToken, profile, done) => {
