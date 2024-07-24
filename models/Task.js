@@ -1,3 +1,4 @@
+// models/Task.js
 const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
@@ -32,10 +33,12 @@ const TaskSchema = new mongoose.Schema({
     },
     completionPercentage: {
         type: Number,
-        default: 0,
-        min: 0,
-        max: 100,
+        default: 0, // Añadir campo de completionPercentage
     },
+    previousCompletionPercentage: {
+        type: Number,
+        default: 0, // Añadir campo para recordar el porcentaje anterior
+    }
 }, {
     timestamps: true,
 });
