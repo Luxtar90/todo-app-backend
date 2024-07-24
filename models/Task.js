@@ -29,7 +29,13 @@ const TaskSchema = new mongoose.Schema({
     color: {
         type: String,
         default: '#1abc9c', // Añadir campo de color con un valor por defecto
-    }
+    },
+    completionPercentage: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+    },
 }, {
     timestamps: true,
 });

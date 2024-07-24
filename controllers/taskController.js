@@ -12,14 +12,15 @@ exports.getTasks = async (req, res) => {
 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, start, end, color } = req.body; // Añadir color aquí
+        const { title, description, start, end, color, completionPercentage } = req.body; // Añadir completionPercentage aquí
         const newTask = new Task({
             user: req.user.id,
             title,
             description,
-            start: new Date(start),
-            end: new Date(end),
-            color // Añadir color aquí
+            start: start ? new Date(start) : undefined,
+            end: end ? new Date(end) : undefined,
+            color,
+            completionPercentage // Añadir completionPercentage aquí
         });
         const task = await newTask.save();
         res.json(task);
@@ -32,16 +33,17 @@ exports.createTask = async (req, res) => {
 exports.updateTask = async (req, res) => {
     try {
         const taskId = req.params.id.trim();
-        const { title, description, start, end, color } = req.body; // Añadir color aquí
+        const { title, description, start, end, color, completionPercentage } = req.body; // Añadir completionPercentage aquí
         const task = await Task.findById(taskId);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
         task.title = title;
         task.description = description;
-        task.start = new Date(start);
-        task.end = new Date(end);
-        task.color = color; // Añadir color aquí
+        task.start = start ? new Date(start) : task.start;
+        task.end = end ? new Date(end) : task.end;
+        task.color = color;
+        task.completionPercentage = completionPercentage; // Añadir completionPercentage aquí
         await task.save();
         res.json(task);
     } catch (error) {
@@ -66,13 +68,14 @@ exports.deleteTask = async (req, res) => {
 
 exports.updateTaskStatus = async (req, res) => {
     const { id } = req.params;
-    const { completed } = req.body;
+    const { completed, completionPercentage } = req.body; // Añadir completionPercentage aquí
     try {
         const task = await Task.findById(id);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
         task.completed = completed;
+        task.completionPercentage = completionPercentage; // Añadir completionPercentage aquí
         await task.save();
         res.status(200).json(task);
     } catch (error) {
@@ -89,6 +92,11 @@ exports.toggleTaskCompletion = async (req, res) => {
             return res.status(404).json({ message: 'Task not found' });
         }
         task.completed = !task.completed;
+        if (task.completed) {
+            task.completionPercentage = 100; // Si la tarea se completa, el porcentaje es 100
+        } else {
+            task.completionPercentage = 0; // Si la tarea se marca como no completada, el porcentaje es 0
+        }
         await task.save();
         res.status(200).json({ message: 'Task status updated', task });
     } catch (error) {
