@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // Asegúrate de importar mongoose
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
@@ -7,15 +7,21 @@ const UserSchema = new mongoose.Schema({
     phone: { type: String },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    googleId: { type: String, unique: true, sparse: true }, // sparse: true permite que googleId sea único pero no requerido
+    password: { 
+        type: String, 
+        required: function() {
+            return !this.googleId && !this.facebookId;
+        }
+    },
+    googleId: { type: String, unique: true, sparse: true }, 
+    facebookId: { type: String, unique: true, sparse: true },
     resetToken: String,
     resetTokenExpiration: Date,
 });
 
 // Middleware para encriptar la contraseña antes de guardar
 UserSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next(); // Solo encripta la contraseña si está presente y modificada
+    if (!this.isModified('password') || !this.password) return next();
     try {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
